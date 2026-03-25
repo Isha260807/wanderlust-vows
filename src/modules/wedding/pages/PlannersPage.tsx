@@ -1,0 +1,82 @@
+import { useState } from 'react';
+import { Search } from 'lucide-react';
+import PlannerCard from '../components/PlannerCard';
+import ScrollReveal from '../components/ScrollReveal';
+import { planners } from '../data/weddingData';
+
+const allCities = [...new Set(planners.flatMap(p => p.cities))].sort();
+
+const PlannersPage = () => {
+  const [search, setSearch] = useState('');
+  const [cityFilter, setCityFilter] = useState('All');
+
+  const filtered = planners.filter(p => {
+    const matchCity = cityFilter === 'All' || p.cities.includes(cityFilter);
+    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.company.toLowerCase().includes(search.toLowerCase());
+    return matchCity && matchSearch;
+  });
+
+  return (
+    <div>
+      <section className="relative py-32 px-4 wedding-gradient">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-background mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+            Wedding Planners
+          </h1>
+          <div className="relative max-w-lg mx-auto">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search planners..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 rounded-full bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 wedding-shadow"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            <button
+              onClick={() => setCityFilter('All')}
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                cityFilter === 'All' ? 'wedding-gradient text-background shadow-md' : 'bg-muted text-muted-foreground hover:bg-primary/10'
+              }`}
+            >
+              All Cities
+            </button>
+            {allCities.map(city => (
+              <button
+                key={city}
+                onClick={() => setCityFilter(city)}
+                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  cityFilter === city ? 'wedding-gradient text-background shadow-md' : 'bg-muted text-muted-foreground hover:bg-primary/10'
+                }`}
+              >
+                {city}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map((planner, i) => (
+              <ScrollReveal key={planner.id} delay={i * 80}>
+                <PlannerCard planner={planner} />
+              </ScrollReveal>
+            ))}
+          </div>
+
+          {filtered.length === 0 && (
+            <div className="text-center py-20 text-muted-foreground">
+              <p className="text-lg">No planners found.</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default PlannersPage;

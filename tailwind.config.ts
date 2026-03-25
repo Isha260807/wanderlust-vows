@@ -57,6 +57,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        wedding: {
+          gold: "hsl(var(--wedding-gold))",
+          rose: "hsl(var(--wedding-rose))",
+          cream: "hsl(var(--wedding-cream))",
+          espresso: "hsl(var(--wedding-espresso))",
+          blush: "hsl(var(--wedding-blush))",
+          sage: "hsl(var(--wedding-sage))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
